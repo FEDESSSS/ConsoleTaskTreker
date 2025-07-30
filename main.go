@@ -28,8 +28,9 @@ type Task struct {
 
 func main() {
 
+	ListComand()
+
 	if len(os.Args) < 2 {
-		ListComand()
 		return
 	}
 
@@ -39,17 +40,17 @@ func main() {
 }
 
 func ListComand() {
-	fmt.Println("Список команд")
-	fmt.Println("")
-	fmt.Println("list - просмотр всех задач")
-	fmt.Println("add - добавление новой задачи")
-	fmt.Println("delete - удаление задачи")
-	fmt.Println("update - изменить задачу")
-	fmt.Println("mark-done - изменить статус задачи на выполнено")
-	fmt.Println("mark-in-progress - изменить статус задачи на выполняемое")
-	fmt.Println("list done - просмотр выполненных задач")
-	fmt.Println("list todo - просмотр невыполненных задач")
-	fmt.Println("list in-progress - просмотр выполняемых задач")
+	pp.Println("Список команд")
+	pp.Println("=================================")
+	pp.Println("list - просмотр всех задач")
+	pp.Println("add - добавление новой задачи")
+	pp.Println("delete - удаление задачи")
+	pp.Println("update - изменить задачу")
+	pp.Println("mark-done - изменить статус задачи на выполнено")
+	pp.Println("mark-in-progress - изменить статус задачи на выполняемое")
+	pp.Println("list done - просмотр выполненных задач")
+	pp.Println("list todo - просмотр невыполненных задач")
+	pp.Println("list in-progress - просмотр выполняемых задач")
 }
 
 func runTask() error {
