@@ -68,6 +68,18 @@ func runTask() error {
 		}
 		return DeleteTask(args[1])
 
+	case "mark-done":
+		if len(args) < 2 {
+			return errors.New("неправильная команад, попробйте еще раз")
+		}
+		return UpdateDone(args[1])
+
+	case "mark-in-progress":
+		if len(args) < 2 {
+			return errors.New("неправильная команад, попробйте еще раз")
+		}
+		return UpdateProgress(args[1])
+
 	case "list":
 		if len(args) > 2 {
 			return errors.New("неправильная команад, попробйте еще раз")
@@ -79,6 +91,12 @@ func runTask() error {
 			return ListProgress()
 		}
 		return ListTask()
+
+	case "update":
+		if len(args) < 3 {
+			return errors.New("неправильная команад, попробйте еще раз")
+		}
+		return UpdateTask(args[1], args[2])
 
 	default:
 		return fmt.Errorf("неизвестная команда: %s", cmd)
@@ -238,6 +256,105 @@ func DeleteTask(id string) error {
 	}
 
 	fmt.Println("Задача удалена:")
+	fmt.Println("===============================")
+	pp.Println(tasks)
+	return nil
+}
+
+func UpdateTask(id string, description string) error {
+	number, _ := strconv.Atoi(id)
+	data, err := os.ReadFile(file)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("ошибка чтения файла: %v", err)
+	}
+
+	if len(data) > 0 {
+		json.Unmarshal(data, &tasks)
+	}
+
+	for j := range tasks {
+		if tasks[j].ID == number {
+			tasks[j].Description = description
+		}
+
+	}
+
+	jsonData, err := json.MarshalIndent(tasks, "", "  ")
+	if err != nil {
+		return fmt.Errorf("ошибка сериализации: %v", err)
+	}
+
+	if err := os.WriteFile(file, jsonData, 0644); err != nil {
+		return fmt.Errorf("ошибка сериализации: %v", err)
+	}
+
+	fmt.Println("Задача обновлена:")
+	fmt.Println("===============================")
+	pp.Println(tasks)
+	return nil
+}
+
+func UpdateDone(id string) error {
+	number, _ := strconv.Atoi(id)
+	data, err := os.ReadFile(file)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("ошибка чтения файла: %v", err)
+	}
+
+	if len(data) > 0 {
+		json.Unmarshal(data, &tasks)
+	}
+
+	for j := range tasks {
+		if tasks[j].ID == number {
+			tasks[j].Status = "done"
+		}
+
+	}
+
+	jsonData, err := json.MarshalIndent(tasks, "", "  ")
+	if err != nil {
+		return fmt.Errorf("ошибка сериализации: %v", err)
+	}
+
+	if err := os.WriteFile(file, jsonData, 0644); err != nil {
+		return fmt.Errorf("ошибка сериализации: %v", err)
+	}
+
+	fmt.Println("Статус обновлен:")
+	fmt.Println("===============================")
+	pp.Println(tasks)
+	return nil
+}
+
+func UpdateProgress(id string) error {
+	number, _ := strconv.Atoi(id)
+	data, err := os.ReadFile(file)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("ошибка чтения файла: %v", err)
+	}
+
+	if len(data) > 0 {
+		json.Unmarshal(data, &tasks)
+	}
+
+	for j := range tasks {
+		if tasks[j].ID == number {
+			tasks[j].Status = "in-progress"
+		}
+
+	}
+
+	jsonData, err := json.MarshalIndent(tasks, "", "  ")
+	if err != nil {
+		return fmt.Errorf("ошибка сериализации: %v", err)
+	}
+
+	if err := os.WriteFile(file, jsonData, 0644); err != nil {
+		return fmt.Errorf("ошибка сериализации: %v", err)
+	}
+
+	fmt.Println("Статус обновлен:")
 	fmt.Println("===============================")
 	pp.Println(tasks)
 	return nil
