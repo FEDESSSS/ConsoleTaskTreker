@@ -175,6 +175,7 @@ func ListDone() error {
 
 	for _, t := range tasks {
 		if t.Status == "done" {
+			t.UpdatedAt = time.Now()
 			tpTask = append(tpTask, t)
 		}
 	}
@@ -198,6 +199,7 @@ func ListProgress() error {
 	for _, t := range tasks {
 		if t.Status == "in-progress" {
 			tpTask = append(tpTask, t)
+			t.UpdatedAt = time.Now()
 		}
 	}
 
@@ -273,9 +275,10 @@ func UpdateTask(id string, description string) error {
 		json.Unmarshal(data, &tasks)
 	}
 
-	for j := range tasks {
-		if tasks[j].ID == number {
-			tasks[j].Description = description
+	for i := range tasks {
+		if tasks[i].ID == number {
+			tasks[i].Description = description
+			tasks[i].UpdatedAt = time.Now()
 		}
 
 	}
@@ -306,9 +309,10 @@ func UpdateDone(id string) error {
 		json.Unmarshal(data, &tasks)
 	}
 
-	for j := range tasks {
-		if tasks[j].ID == number {
-			tasks[j].Status = "done"
+	for i := range tasks {
+		if tasks[i].ID == number {
+			tasks[i].UpdatedAt = time.Now()
+			tasks[i].Status = "done"
 		}
 
 	}
@@ -339,9 +343,10 @@ func UpdateProgress(id string) error {
 		json.Unmarshal(data, &tasks)
 	}
 
-	for j := range tasks {
-		if tasks[j].ID == number {
-			tasks[j].Status = "in-progress"
+	for i := range tasks {
+		if tasks[i].ID == number {
+			tasks[i].UpdatedAt = time.Now()
+			tasks[i].Status = "in-progress"
 		}
 
 	}
